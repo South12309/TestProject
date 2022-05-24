@@ -29,6 +29,15 @@ class AppTestTest {
                 Arguments.of(new int[]{1,2,6,5,4,2,6,4,5,3}, new int[]{5,3})
         );
     }
+ private static Stream<Arguments> provideArgsForMethodchekArrayInclude1or4() {
+        return Stream.of(
+                Arguments.of(new int[]{1,2,6,5,4,2,6,5,4,3}, true),
+                Arguments.of(new int[]{1,2,6,5,2,5,3,3}, false),
+                Arguments.of(new int[]{1,2,6,5,4,2,6,5,0,3}, true),
+                Arguments.of(new int[]{2,6,5,4,2,6,5,3}, false),
+                Arguments.of(new int[]{1,2,6,5,4,2,6,4,5,3}, true)
+        );
+    }
 
 
     @ParameterizedTest
@@ -39,10 +48,13 @@ class AppTestTest {
 
     @Test
     void getArrayFrom4() {
-
+        int[] array = new int[] {1,2,3,5,6};
+        Assertions.assertThrows(RuntimeException.class, () ->appTest.getArrayFrom4(array));
     }
 
-    @Test
-    void chekArrayInclude1or4() {
+    @ParameterizedTest
+    @MethodSource("provideArgsForMethodchekArrayInclude1or4")
+    void chekArrayInclude1or4(int[] array, boolean result) {
+        Assertions.assertEquals(result, appTest.chekArrayInclude1or4(array));
     }
 }
